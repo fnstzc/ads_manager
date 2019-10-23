@@ -1,0 +1,18 @@
+package com.dewmobile.ads.manager.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+@RequestMapping("/adplat")
+public class AdvertController {
+
+    public String getData(@PathVariable("campaign_id") String campaignId) {
+
+        return "";
+    }
+
+}
