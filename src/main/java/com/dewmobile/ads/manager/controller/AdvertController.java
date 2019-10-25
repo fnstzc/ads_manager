@@ -1,18 +1,30 @@
 package com.dewmobile.ads.manager.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.dewmobile.ads.manager.body.QueryAdsReq;
+import com.dewmobile.ads.manager.body.ResultBody;
+import com.dewmobile.ads.manager.handler.AdvertHandler;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
-
+/**
+ * 广告数据控制类
+ *
+ * @author zc
+ * @date 2019-10-22
+ */
 @RestController
-@RequestMapping("/adplat")
+@RequestMapping("/adplat/data")
 public class AdvertController {
 
-    public String getData(@PathVariable("campaign_id") String campaignId) {
+    private final AdvertHandler advertHandler;
 
-        return "";
+    public AdvertController(AdvertHandler advertHandler) {
+        this.advertHandler = advertHandler;
+    }
+
+    @PostMapping(value = "/advert")
+    public Mono<ResultBody> getAdsShowReportData(@RequestBody QueryAdsReq req) {
+        return advertHandler.getAdsShowReportData(req);
     }
 
 }
