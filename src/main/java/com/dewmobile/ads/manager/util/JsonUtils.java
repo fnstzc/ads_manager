@@ -1,9 +1,9 @@
 package com.dewmobile.ads.manager.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.dewmobile.ads.common.AdsShowReport;
+import com.dewmobile.ads.manager.entity.AdsShowReport;
 
-public class JsonUtil {
+public class JsonUtils {
 
     public static JSONObject toJson(String key, Object value) {
         JSONObject jsonObj = new JSONObject();
@@ -24,5 +24,6 @@ public class JsonUtil {
         jsonObject.put("spent", adsShowReport.getSpent());
         return jsonObject;
     }
+
 
 }

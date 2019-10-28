@@ -18,10 +18,6 @@
         <java.version>1.8</java.version>
     </properties>
 
-    <modules>
-        <module>ads_common</module>
-    </modules>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

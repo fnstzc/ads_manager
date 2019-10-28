@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.dewmobile.ads.manager.body.QueryAdsReq;
 import com.dewmobile.ads.manager.body.ResultBody;
 import com.dewmobile.ads.manager.mapper.AdvertMapper;
-import com.dewmobile.ads.manager.util.JsonUtil;
+import com.dewmobile.ads.manager.util.JsonUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
@@ -30,18 +30,20 @@ public class AdvertHandler {
 
     public Mono<ResultBody> getAdsShowReportData(QueryAdsReq req) {
         ResultBody rb;
+
+        if (StringUtils.isEmpty(req.getAccesskey()) || StringUtils.isEmpty(req.getCampaign())) {
+            return Mono.just(ResultBody.badRequest("param is incomplete!"));
+        }
         String accountName = authHandler.getAccountName(req.getAccesskey());
         if (StringUtils.isEmpty(accountName)) {
             rb = ResultBody.badRequest("account is not exist!");
         } else {
             // 首先检查请求的campaign是否属于该account账户名下，不是则失败
-            Optional<String> campaignName = advertMapper.getAccountCampaigns(accountName).stream()
+            Optional<String> campaignName = advertMapper.findAccountCampaigns(accountName).stream()
                     .filter(cname -> cname.equals(req.getCampaign())).findFirst();
             if (campaignName.isPresent()) {
-                JSONArray jsonArray = new JSONArray();
-                advertMapper.getAdsShowReport(req.getCampaign(), req.getStartTime(), req.getEndTime()).stream()
-                        .map(JsonUtil::toJson).forEach(jsonArray::add);
-                rb = ResultBody.success(jsonArray);
+
+                rb = ResultBody.success(getAdsReports(req));
             } else {
                 rb = ResultBody.badRequest("campaign is not found!");
             }
@@ -49,4 +51,18 @@ public class AdvertHandler {
         return Mono.just(rb);
     }
 
+    private JSONArray getAdsReports(QueryAdsReq req) {
+        JSONArray jsonArray = new JSONArray();
+        advertMapper.findAdsShowReport(req.getCampaign(), req.getStartTime(), req.getEndTime()).stream()
+                .map(JsonUtils::toJson).forEach(jsonArray::add);
+        return jsonArray;
+    }
+
+    private JSONArray getAdsRatios(QueryAdsReq req) {
+        JSONArray jsonArray = new JSONArray();
+        long campaignId = advertMapper.findCampaignId(req.getCampaign());
+        List<String> countrys = advertMapper.findAdsCountrys(campaignId);
+
+        return jsonArray;
+    }
 }

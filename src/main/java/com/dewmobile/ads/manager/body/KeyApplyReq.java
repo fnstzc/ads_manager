@@ -11,9 +11,7 @@ import lombok.Data;
  * @date 2019-10-22
  */
 @Data
-@AllArgsConstructor
 public class KeyApplyReq {
     @JsonProperty("loginname")
     private String loginName;
-    private String password;
 }
